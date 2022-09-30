@@ -68,7 +68,7 @@ func (cfg *Config) RegisterFlags(f *flag.FlagSet) {
 	f.BoolVar(&cfg.QueryStoreOnly, "querier.query-store-only", false, "Queriers should only query the store and not try to query any ingesters")
 	f.BoolVar(&cfg.QueryIngesterOnly, "querier.query-ingester-only", false, "Queriers should only query the ingesters and not try to query any store")
 	f.BoolVar(&cfg.MultiTenantQueriesEnabled, "querier.multi-tenant-queries-enabled", false, "Enable queries across multiple tenants. (Experimental)")
-	f.IntVar(&cfg.MaxBufferedTailResponses, "querier.max-buffered-tail-responses", 10, "The size of the channel buffer used to send tailing streams back to the requesting client. (Experimental)")
+	f.IntVar(&cfg.MaxBufferedTailResponses, "querier.max-buffered-tail-responses", 100, "The size of the channel buffer used to send tailing streams back to the requesting client. (Experimental)")
 }
 
 // Validate validates the config.
