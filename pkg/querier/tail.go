@@ -19,10 +19,6 @@ const (
 	// keep checking connections with ingesters in duration
 	checkConnectionsWithIngestersPeriod = time.Second * 5
 
-	// the size of the channel buffer used to send tailing streams
-	// back to the requesting client
-	maxBufferedTailResponses = 10
-
 	// the maximum number of entries to return in a TailResponse
 	maxEntriesPerTailResponse = 100
 
@@ -306,6 +302,7 @@ func newTailer(
 	tailMaxDuration time.Duration,
 	waitEntryThrottle time.Duration,
 	m *Metrics,
+	maxBufferedTailResponses int,
 ) *Tailer {
 	t := Tailer{
 		openStreamIterator:        iter.NewMergeEntryIterator(context.Background(), []iter.EntryIterator{historicEntries}, logproto.FORWARD),

@@ -55,6 +55,7 @@ type Config struct {
 	QueryIngesterOnly             bool             `yaml:"query_ingester_only"`
 	MultiTenantQueriesEnabled     bool             `yaml:"multi_tenant_queries_enabled"`
 	QueryTimeout                  time.Duration    `yaml:"query_timeout"`
+	MaxBufferedTailResponses      int              `yaml:"max_buffered_tail_responses"`
 }
 
 // RegisterFlags register flags.
@@ -67,6 +68,7 @@ func (cfg *Config) RegisterFlags(f *flag.FlagSet) {
 	f.BoolVar(&cfg.QueryStoreOnly, "querier.query-store-only", false, "Queriers should only query the store and not try to query any ingesters")
 	f.BoolVar(&cfg.QueryIngesterOnly, "querier.query-ingester-only", false, "Queriers should only query the ingesters and not try to query any store")
 	f.BoolVar(&cfg.MultiTenantQueriesEnabled, "querier.multi-tenant-queries-enabled", false, "Enable queries across multiple tenants. (Experimental)")
+	f.IntVar(&cfg.MaxBufferedTailResponses, "querier.max-buffered-tail-responses", 10, "The size of the channel buffer used to send tailing streams back to the requesting client. (Experimental)")
 }
 
 // Validate validates the config.
@@ -483,6 +485,7 @@ func (q *SingleTenantQuerier) Tail(ctx context.Context, req *logproto.TailReques
 		q.cfg.TailMaxDuration,
 		tailerWaitEntryThrottle,
 		q.metrics,
+		q.cfg.MaxBufferedTailResponses,
 	), nil
 }
 
